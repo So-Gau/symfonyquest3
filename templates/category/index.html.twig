@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+<h1>La liste des catégories</h1>
+{% endblock %}
+
+{% block body %}
+{% for categories in category %}
+        <div>
+            {# Lien vers les categories : #}
+            <h2><a href="/category/{{categories.name}}">{{categories.name}}</a></h2>
+        </div>
+{% endfor %}
+{% endblock %}

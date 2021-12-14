@@ -33,7 +33,7 @@ class Program
     private $poster;
 
     /**
-     * @ORM\ManyToOne(targetEntity=category::class)
+     * @ORM\ManyToOne(targetEntity="Category")
      * @ORM\JoinColumn(nullable=false)
      */
     private $category;
