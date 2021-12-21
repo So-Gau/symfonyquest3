@@ -8,6 +8,7 @@ use App\Entity\Program;
 use App\Entity\Category;
 use App\Form\ProgramType;
 use App\Repository\ProgramRepository;
+use App\Service\Slugify;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -67,7 +68,7 @@ class ProgramController extends AbstractController
         ]);
     }
 
-   /**
+    /**
     * Getting a program by id
     *
     * @Route("/show/{id<^[0-9]+$>}", name="show")
