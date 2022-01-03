@@ -81,20 +81,11 @@ class ProgramController extends AbstractController
     * @return Response
     */
 
-    public function show(int $id, Program $program, SeasonRepository $seasonRepository): Response
+    public function show(Program $program, SeasonRepository $seasonRepository): Response
     {
-        $program = $this->getDoctrine()
-            ->getRepository(Program::class)
-            ->findOneBy(['id' => $id]);
-
-        if (!$program) {
-            throw $this->createNotFoundException(
-                'No program with id : '.$id.' found in program\'s table.'
-            );
-        }
+       
         return $this->render('program/show.html.twig', [
             'program' => $program,
-            'seasons' => $seasons,
         ]);
     }
 
@@ -109,5 +100,4 @@ class ProgramController extends AbstractController
             'season' => $season,
         ]);
     }
-
 }

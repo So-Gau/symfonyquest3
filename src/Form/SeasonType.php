@@ -15,8 +15,7 @@ class SeasonType extends AbstractType
             ->add('number')
             ->add('year')
             ->add('description')
-            // cela ne devrait pas etre en P maj
-            ->add('Program', null, ['choice_label' => 'title'])
+            ->add('program', null, ['choice_label' => 'title'])
         ;
     }
 
