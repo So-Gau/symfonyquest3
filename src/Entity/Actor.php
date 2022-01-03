@@ -2,38 +2,33 @@
 
 namespace App\Entity;
 
-use App\Repository\CategoryRepository;
+use App\Repository\ActorRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass=CategoryRepository::class)
+ * @ORM\Entity(repositoryClass=ActorRepository::class)
  */
-
-class Category
+class Actor
 {
-    
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
     private $id;
-    
+
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank()
-     * @Assert\Length(max="255")
-    */
+     */
     private $name;
-    //...
+
     /**
-    * @ORM\OneToMany(targetEntity=Program::class, mappedBy="category")
-    */
+     * @ORM\ManyToMany(targetEntity=Program::class, inversedBy="actors")
+     */
     private $programs;
-    
+
     public function __construct()
     {
         $this->programs = new ArrayCollection();
@@ -57,40 +52,25 @@ class Category
     }
 
     /**
-    * @return Collection|Program[]
-    */
+     * @return Collection|Program[]
+     */
     public function getPrograms(): Collection
     {
         return $this->programs;
     }
 
-    /**
-     * @param Program $program
-    * @return Category
-    */
-
     public function addProgram(Program $program): self
     {
-            if (!$this->programs->contains($program)) {
+        if (!$this->programs->contains($program)) {
             $this->programs[] = $program;
-            $program->setCategory($this);
-            }
+        }
+
         return $this;
     }
-    
-    /**
-    * @param Program $program
-    * @return Category
-    */
 
     public function removeProgram(Program $program): self
     {
-        if ($this->programs->removeElement($program)) {
-        // set the owning side to null (unless already changed)
-            if ($program->getCategory() === $this) {
-                $program->setCategory(null);
-            }
-        }
+        $this->programs->removeElement($program);
 
         return $this;
     }

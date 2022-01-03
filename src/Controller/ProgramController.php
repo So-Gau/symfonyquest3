@@ -6,13 +6,19 @@ namespace App\Controller;
 
 use App\Entity\Program;
 use App\Entity\Category;
-use App\Form\ProgramType;
+use App\Entity\Episode;
+use App\Entity\Season;
+
 use App\Repository\ProgramRepository;
+use App\Repository\SeasonRepository;
+use App\Repository\EpisodeRepository;
+
 use App\Service\Slugify;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Form\ProgramType;
 
 /**
  * @Route("/program", name="program_")
@@ -75,7 +81,7 @@ class ProgramController extends AbstractController
     * @return Response
     */
 
-    public function show(int $id): Response
+    public function show(int $id, Program $program, SeasonRepository $seasonRepository): Response
     {
         $program = $this->getDoctrine()
             ->getRepository(Program::class)
@@ -88,6 +94,20 @@ class ProgramController extends AbstractController
         }
         return $this->render('program/show.html.twig', [
             'program' => $program,
+            'seasons' => $seasons,
         ]);
     }
+
+    /**
+     * @Route("/{programId}/seasons/{seasonId}", name="season_show")
+     */
+    public function showSeason(Program $program, Season $season): Response
+    {
+
+        return $this->render('program/season_show.html.twig', [
+            'program' => $program,
+            'season' => $season,
+        ]);
+    }
+
 }
