@@ -43,6 +43,7 @@ class ActorController extends AbstractController
     }
 
     #[Route('/{id}', name: 'actor_show', methods: ['GET'])]
+    
     public function show(Actor $actor): Response
     {
         $program = $actor->getPrograms();
