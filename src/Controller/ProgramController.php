@@ -67,15 +67,17 @@ class ProgramController extends AbstractController
         $form = $this->createForm(ProgramType::class, $program);
          // Get data from HTTP request
         $form->handleRequest($request);
-        // Was the form submitted ?
+        
         if ($form->isSubmitted() && $form->isValid()) {
-            // Deal with the submitted data
+            
             // Get the Entity Manager
             $entityManager = $this->getDoctrine()->getManager();
             // Persist Program Object
             $entityManager->persist($program);
             $entityManager->flush();
             // Finally redirect to program list
+            $this->addFlash('success', 'The new program has been created');
+
             return $this->redirectToRoute('program_index');
         }
          // Render the form

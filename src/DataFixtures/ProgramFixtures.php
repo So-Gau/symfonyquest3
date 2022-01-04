@@ -53,7 +53,7 @@ class ProgramFixtures extends Fixture implements DependentFixtureInterface
 ];
     public function load(ObjectManager $manager): void
     {
-        foreach (static::PROGRAMS as $key => $program) {  
+        //foreach (static::PROGRAMS as $key => $program) {  
             $program = new Program();
             $program->SetTitle('title');
             $program->SetPoster('poster');
