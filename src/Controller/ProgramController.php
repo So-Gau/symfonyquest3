@@ -9,6 +9,7 @@ use App\Entity\Category;
 use App\Entity\Episode;
 use App\Entity\Season;
 
+use App\Form\SearchProgramType;
 use App\Repository\ProgramRepository;
 use App\Repository\SeasonRepository;
 use App\Repository\EpisodeRepository;
@@ -34,16 +35,22 @@ class ProgramController extends AbstractController
      * @Route("/", name="index")
      * @return Response A response instance
      */
-    public function index(): Response
+    public function index(Request $request, ProgramRepository $programRepository): Response
     {
-        $programs = $this->getDoctrine()
-            ->getRepository(Program::class)
-            ->findAll();
+        $form = $this->createForm(SearchProgramType::class);
+        $form->handleRequest($request);
 
-        return $this->render(
-            'program/index.html.twig',
-            ['programs' => $programs]
-        );
+        if($form->isSubmitted() && $form->isValid()) {
+            $search = $form->getData()['search'];
+            $programs =$programRepository->findLikeName($search);
+        } else {
+            $programs = $programRepository->findAll();
+        }
+
+        return $this->render('program/index.html.twig', [
+            'programs' => $programs,
+            'form' => $form->createView(),
+        ]);
     }
 
      /**

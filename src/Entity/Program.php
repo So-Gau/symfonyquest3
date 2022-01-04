@@ -58,16 +58,6 @@ class Program
     private $actors;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $synopsis;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $country;
-
-    /**
      * @ORM\Column(type="integer")
      */
     private $year;
@@ -188,30 +178,6 @@ class Program
                 $season->setProgram(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getSynopsis(): ?string
-    {
-        return $this->synopsis;
-    }
-
-    public function setSynopsis(string $synopsis): self
-    {
-        $this->synopsis = $synopsis;
-
-        return $this;
-    }
-
-    public function getCountry(): ?string
-    {
-        return $this->country;
-    }
-
-    public function setCountry(string $country): self
-    {
-        $this->country = $country;
 
         return $this;
     }
