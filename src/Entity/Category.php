@@ -65,7 +65,7 @@ class Category
     }
 
     /**
-     * @param Program $program
+    * @param Program $program
     * @return Category
     */
 

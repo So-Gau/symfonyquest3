@@ -110,6 +110,22 @@ class ProgramController extends AbstractController
         return $this->render('program/season_show.html.twig', [
             'program' => $program,
             'season' => $season,
+
+        ]);
+    }
+
+     /**
+     * @Route("/{program_id}/season/{season_id}", name="show_season")
+     * @ParamConverter("program", class="App\Entity\Program", options={"mapping": {"program_id" : "id"}})
+     * @ParamConverter("season", class="App\Entity\Season", options={"mapping": {"season_id" : "id"}})
+     * @ParamConverter("episode", class="App\Entity\Episode", options={"mapping": {"episode_id": "id"}})
+     */
+     public function showEpisode(Program $program, Season $season, Episode $episode): Response
+     {
+        return $this->render('program/episode_show.html.twig', [
+            'program' => $program,
+            'season' => $season,
+            'episode' => $episode
         ]);
     }
 }
