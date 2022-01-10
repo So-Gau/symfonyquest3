@@ -2,8 +2,6 @@
 
 body {
     background-color: rgb(58, 46, 116);
-    background-size: cover;
-    background-repeat: no-repeat;
     color: rgb(255, 255, 255);
 
     h1 {
@@ -12,12 +10,13 @@ body {
         text-shadow: -2px 0 black, 0 1px black,
       1px 0 black, 0 -1px black
     }
-
-    p {
-      color: white;
-    }
+    
+}
+p {
+  color: white;
 }
 
+//-----------------------------------------program---------------------------------
 .Program-form {
   display: flex;
   flex-direction: column;
@@ -25,3 +24,14 @@ body {
   margin-top: 2rem;
   margin-bottom: 2rem;
 }
+//------------------------------------- program/show-------------------------------
+.width-poster{
+  width: 25rem;
+}
+
+//------------------------------------- end program/show---------------------------
+//-------------------------------------program/season_show-------------------------
+.media{
+  margin:2rem;
+}
+//-------------------------------------end program/season_show---------------------

@@ -7,7 +7,7 @@
 	<div class="programs-list">
 		<div class="media">
 			<h1>{{ program.title }}</h1>
-			<img src="{{program.poster}}" alt="image de la série {{ program.title }} poster" width=" 300px">
+			<img src="{{program.poster}}" alt="image de la série {{ program.title }} poster" width=" 250px">
 			<div class="media-body">
 				<p>{{ program.summary }}</p>
 				<p>Catégorie :
@@ -15,12 +15,16 @@
 
 
 				{% for season in program.seasons %}
-					<a href="{{ path("program_season_show", { program: program.id, season : season.id }) }}">
+					<a href="{{ path("program_season_show", {slug: program.slug, seasonId: season.id}) }}">
 						<p>Saison
 							{{season.number}}
 							/ Année :
-							{{season.year}}</p>
+							{{season.year}}
+						</p>
 					</a>
+						<p>Description :
+							{{season.description}}
+						</p>
 				{% endfor %}
 				<strong>Acteurs :</strong>
 				<ul>

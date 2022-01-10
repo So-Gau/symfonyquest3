@@ -1,23 +1,24 @@
 {% extends 'base.html.twig' %}
 {% block body %}
 	<div class="media">
-		<img src="{{program.poster}}" alt="image of the program">
+		<img class= "width-poster" src="{{season.program.poster}}" alt="image of the program">
 		<div class="">
-			<h3 class="">{{program.title}}</h3>
+			<h3 class="">{{season.program.title}}</h3>
 			<p>Saison
 				{{season.number}}
 				/ Année :
 				{{season.number}}</p>
 			{% for episode in season.episodes %}
-				<a href="{{ path("program_episode_show", {programId: program.id, seasonId : season.id, episodeId : episode.id})}}">
+				<a href="{{ path("program_episode_show", {slug: program.slug, seasonId: season.id, episodeId : episode.id})}}">
 					<p class="" style="height: 5rem; font-size: 1rem;">Épisode
 						{{episode.number}}
 						:
 						{{episode.title}}
+						{{episode.synopsis}}
 					</p>
 				</a>
 			{% endfor %}
-			<a href="{{ path("program_show", { id: program.id }) }}" class="btn btn-primary">Liste des séries</a>
+			<a href="{{ path("program_show", { slug: season.program.slug }) }}" class="btn btn-primary">Liste des séries</a>
 		</div>
 	</div>
 {% endblock %}

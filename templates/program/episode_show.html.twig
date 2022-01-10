@@ -2,13 +2,11 @@
 {% block body %}
 	<div class="media">
 		<div class="media-body">
-		<h1> {{program.title}}</h1>
-			<p>Saison :{{ season.number }}</p>
-			<p>Catégorie : {{ program.category.name }}</p>
-			<p>Episodes : {{episodes.number}}, {{episodes.title}} </p>
-			<p>Synopsis : {{episodes.synopsis}}
+			<h1> {{season.program.title}}</h1>
+			<p>Saison :{{ season.number }}</p
+			<p>Episodes : {{episode.title}}, {{episode.number}}</p>
+			<p>Synopsis : {{episode.synopsis}}</p>
 		</div>
-			<a href="{{ path("program_show_season", { program_id: program.id, season_id: season.id }) }}">Retour sur la saison {{season.number}}</a>
-
+			<a href="{{ path("program_season_show", { slug: program.slug, seasonId: season.id}) }}">Retour sur la saison {{season.number}}</a>
 	</div>
 {% endblock %}

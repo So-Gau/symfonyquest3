@@ -3,6 +3,8 @@
 namespace App\DataFixtures;
 
 use App\Entity\Program;
+use App\Service\Slugify;
+
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -50,7 +52,15 @@ class ProgramFixtures extends Fixture implements DependentFixtureInterface
             'category'=>'category_3',
             'actors'=>[''],
         ],      
-];
+    ];
+
+    private Slugify $slugify;
+
+    public function __construct(Slugify $slugifyAsParameter)
+    {
+        $this->slugify = $slugifyAsParameter;
+    }
+
     public function load(ObjectManager $manager): void
     {
         foreach (self::PROGRAMS as $key => $programData) {  
@@ -59,6 +69,9 @@ class ProgramFixtures extends Fixture implements DependentFixtureInterface
             $program->setPoster($programData['poster']);
             $program->setSummary($programData['summary']);
             $program->setYear($programData['year']);
+            $program->setSlug(
+                $this->slugify->generate($programData['title'])
+            );
             $this->addReference('program_' . $key, $program); 
             
             $program->setCategory($this->getReference($programData['category']));

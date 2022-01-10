@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
@@ -60,15 +61,17 @@ class ProgramController extends AbstractController
      * @Route("/new", name="new")
      */
 
-    public function new(Request $request) : Response
+    public function new(Request $request, Slugify $slugify) : Response
     {
         $program = new Program();
         // Create the associated Form
         $form = $this->createForm(ProgramType::class, $program);
          // Get data from HTTP request
         $form->handleRequest($request);
-        
+
         if ($form->isSubmitted() && $form->isValid()) {
+            $slug = $slugify->generate($program->getTitle());
+            $program->setSlug($slug);
             
             // Get the Entity Manager
             $entityManager = $this->getDoctrine()->getManager();
@@ -76,23 +79,23 @@ class ProgramController extends AbstractController
             $entityManager->persist($program);
             $entityManager->flush();
             // Finally redirect to program list
-            $this->addFlash('success', 'The new program has been created');
-
+            $this->addFlash('success', 'Un nouveau programme a bien été crée');
+            
             return $this->redirectToRoute('program_index');
         }
-         // Render the form
+        // Render the form
         return $this->render('program/new.html.twig', [
             "form" => $form->createView(),
         ]);
+        
     }
-
+    
     /**
-    * Getting a program by id
     *
-    * @Route("/show/{id<^[0-9]+$>}", name="show")
+    * @Route("/{slug}", name="show")
+    * @ParamConverter("program", class="App\Entity\Program", options={"mapping": {"slug" : "slug"}})
     * @return Response
     */
-
     public function show(Program $program, SeasonRepository $seasonRepository): Response
     {
        
@@ -102,7 +105,9 @@ class ProgramController extends AbstractController
     }
 
     /**
-     * @Route("/{programId}/seasons/{seasonId}", name="season_show")
+     * @Route("/{slug}/season/{seasonId}", name="season_show")
+     * @ParamConverter("program", class="App\Entity\Program", options={"mapping": {"slug": "slug"}})
+     * @ParamConverter("season", class="App\Entity\Season", options={"mapping": {"seasonId": "id"}})
      */
     public function showSeason(Program $program, Season $season): Response
     {
@@ -110,22 +115,24 @@ class ProgramController extends AbstractController
         return $this->render('program/season_show.html.twig', [
             'program' => $program,
             'season' => $season,
-
         ]);
     }
-
-     /**
-     * @Route("/{program_id}/season/{season_id}", name="show_season")
-     * @ParamConverter("program", class="App\Entity\Program", options={"mapping": {"program_id" : "id"}})
-     * @ParamConverter("season", class="App\Entity\Season", options={"mapping": {"season_id" : "id"}})
-     * @ParamConverter("episode", class="App\Entity\Episode", options={"mapping": {"episode_id": "id"}})
+                                                                                                                
+    /**
+     * @Route("/{slug}/season/{seasonId}/episode/{episodeId}", methods={"GET"}, name="episode_show")
+     * @ParamConverter("program", class="App\Entity\Program", options={"mapping": {"slug" : "slug"}})
+     * @ParamConverter("season", class="App\Entity\Season", options={"mapping": {"seasonId" : "id"}})
+     * @ParamConverter("episode", class="App\Entity\Episode", options={"mapping": {"episodeId": "id"}})
      */
-     public function showEpisode(Program $program, Season $season, Episode $episode): Response
-     {
-        return $this->render('program/episode_show.html.twig', [
-            'program' => $program,
-            'season' => $season,
-            'episode' => $episode
-        ]);
-    }
+    //options={"mapping": {"episodeId": "id"}}) !rappel: url a droite l'entité à gauche
+
+    public function showEpisode(Program $program, Season $season, Episode $episode): Response
+    {
+       return $this->render('program/episode_show.html.twig', [
+           'program' => $program,
+           'season' => $season,
+           'episode' => $episode
+       ]);
+   }
+
 }

@@ -1,8 +1,10 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
-    {{ form_start(form) }}
-    {{ form_widget(form) }}<br>
-    <button type="submit">Add program</button>
-    {{ form_end(form) }}
+    <div class = 'containerForm'>
+        {{ form_start(form) }}
+        {{ form_widget(form) }}<br>
+        <button type="submit">Ajoute un programme</button>
+        {{ form_end(form) }}
+    </div>
 {% endblock %}
