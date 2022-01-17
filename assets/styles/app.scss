@@ -1,7 +1,7 @@
 @import "~bootstrap/scss/bootstrap";
 
 body {
-    background-color: rgb(58, 46, 116);
+    background-color: rgb(165,42,42);
     color: rgb(255, 255, 255);
 
     h1 {
@@ -15,6 +15,14 @@ body {
 p {
   color: white;
 }
+//------------------------------------------navbar-------------------------------
+.nav-item {
+  color: rgb(53, 0, 0);
+}
+
+li {
+  list-style: none;
+}
 
 //-----------------------------------------program---------------------------------
 .Program-form {
@@ -25,13 +33,20 @@ p {
   margin-bottom: 2rem;
 }
 //------------------------------------- program/show-------------------------------
-.width-poster{
+.width-poster {
   width: 25rem;
 }
 
 //------------------------------------- end program/show---------------------------
 //-------------------------------------program/season_show-------------------------
-.media{
+.media {
   margin:2rem;
 }
+
 //-------------------------------------end program/season_show---------------------
+.link-style {
+  text-decoration: none;
+  color: blanchedalmond;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}

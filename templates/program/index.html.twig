@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 {% block body %}}
 
-    <h1>Toutes les séries du programmes</h1>
+    <h1>Toutes les séries du programme</h1>
 
     <div class="Program-form">
         {{ form_start(form) }}
@@ -16,11 +16,11 @@
             <h2>{{ loop.index }} / {{ program.title }} - Catégorie : {{ program.category.name }}</h2>
             <p>{{ program.summary }}</p>
             {# Lien vers la fiche de la série : #}
-            <a href="{{ path("program_show", { slug: program.slug }) }}">Voir la fiche</a>
+            <a class="link-style" href="{{ path("program_show", { slug: program.slug }) }}">Voir la fiche</a>
         </div>
     </div>
     {% endfor %}
-        <a href="{{ path('app_index') }}">
+        <a class="link-style" href="{{ path('app_index') }}">
             Retour à l'accueil
         </a>
 {% endblock %}
