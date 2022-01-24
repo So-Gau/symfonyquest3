@@ -50,3 +50,46 @@ li {
   margin-top: 1rem;
   margin-bottom: 1rem;
 }
+
+//---------------------------program/episode_show------------------------
+.media-body {
+  font-size: 1.2rem;
+}
+
+.container-comment {
+  background-color: whitesmoke;
+  padding: 1rem;
+  border: thick double #730000;
+  border-radius: 10px;
+}
+
+.container-comment p {
+  color:black;
+  font-size: 1rem;
+}
+// style
+
+.container-column-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.container-column-center input {
+  margin-bottom: 8px;
+}
+.btn {
+    border-color: $white;
+    color: #fff;
+    box-shadow: 0 0 40px 40px $red inset, 0 0 0 0 $red;
+    transition: all 150ms ease-in-out;
+    margin-top: 1rem;
+    
+    &:hover {
+      box-shadow: 0 0 10px 0 $white inset, 0 0 10px 4px $white;
+      color:white;
+    }
+  }
+

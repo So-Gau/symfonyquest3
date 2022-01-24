@@ -3,15 +3,16 @@
 namespace App\Controller;
 
 use App\Entity\Comment;
-use App\Form\Comment1Type;
+use App\Form\CommentType;
 use App\Repository\CommentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
-#[Route('/comment')]
+#[Route('/comment', name:'comment')]
 class CommentController extends AbstractController
 {
     #[Route('/', name: 'comment_index', methods: ['GET'])]
@@ -22,11 +23,15 @@ class CommentController extends AbstractController
         ]);
     }
 
+
+    /**
+     * @IsGranted("ROLE_CONTRIBUTOR")
+     **/
     #[Route('/new', name: 'comment_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $comment = new Comment();
-        $form = $this->createForm(Comment1Type::class, $comment);
+        $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -50,10 +55,13 @@ class CommentController extends AbstractController
         ]);
     }
 
+     /**
+     * @IsGranted("ROLE_CONTRIBUTOR")
+     * */
     #[Route('/{id}/edit', name: 'comment_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Comment $comment, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(Comment1Type::class, $comment);
+        $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -68,6 +76,10 @@ class CommentController extends AbstractController
         ]);
     }
 
+     /**
+     * @IsGranted("ROLE_CONTRIBUTOR")
+     * @IsGranted("ROLE_ADMIN")
+     * */
     #[Route('/{id}', name: 'comment_delete', methods: ['POST'])]
     public function delete(Request $request, Comment $comment, EntityManagerInterface $entityManager): Response
     {

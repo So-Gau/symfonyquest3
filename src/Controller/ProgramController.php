@@ -8,22 +8,26 @@ use App\Entity\Program;
 use App\Entity\Category;
 use App\Entity\Episode;
 use App\Entity\Season;
+use App\Entity\Comment;
 
+use App\Form\ProgramType;
+use App\Form\CommentType;
 use App\Form\SearchProgramType;
 use App\Repository\ProgramRepository;
 use App\Repository\SeasonRepository;
 use App\Repository\EpisodeRepository;
+use App\Repository\CommentRepository;
 
 use App\Service\Slugify;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
-use App\Form\ProgramType;
 
 /**
  * @Route("/program", name="program_")
@@ -119,20 +123,44 @@ class ProgramController extends AbstractController
     }
                                                                                                                 
     /**
-     * @Route("/{slug}/season/{seasonId}/episode/{episodeId}", methods={"GET"}, name="episode_show")
+     * @Route("/{slug}/season/{seasonId}/episode/{episodeId}", name="episode_show")
      * @ParamConverter("program", class="App\Entity\Program", options={"mapping": {"slug" : "slug"}})
      * @ParamConverter("season", class="App\Entity\Season", options={"mapping": {"seasonId" : "id"}})
      * @ParamConverter("episode", class="App\Entity\Episode", options={"mapping": {"episodeId": "id"}})
      */
-    //options={"mapping": {"episodeId": "id"}}) !rappel: url a droite l'entité à gauche
+    //options={"mapping": {"episodeId": "id"}}) !rappel: url a droite / l'entité à gauche
 
-    public function showEpisode(Program $program, Season $season, Episode $episode): Response
+    public function showEpisode(Request $request, Program $program, Season $season, Episode $episode,EntityManagerInterface $entityManager, CommentRepository $commentRepository): Response
     {
-       return $this->render('program/episode_show.html.twig', [
-           'program' => $program,
-           'season' => $season,
-           'episode' => $episode
-       ]);
-   }
+        $comment = new Comment();
+        $form = $this->createForm(CommentType::class, $comment);
+        $form->handleRequest($request);
 
+        if ($form->isSubmitted() && $form->isValid()) {
+            if ($this->getUser() == null ) {
+                return $this->redirectToRoute('login');
+
+                throw new AccessDeniedException('Vous devriez être connecté pour laisser un commentaire. :)');
+            }
+            $comment->setEpisode($episode);
+            $comment->setAuthor($this->getUser());
+            $entityManager->persist($comment);
+            $entityManager->flush();
+            
+            return $this->redirectToRoute('program_episode_show', [
+                'slug' => $program->getSlug(),
+                'seasonId' => $season->getId(),
+                'episodeId' => $episode->getId()
+            ]);
+        }
+        
+        return $this->renderForm('program/episode_show.html.twig', [
+            'program' => $program,
+            'season' => $season,
+            'episode' => $episode,
+            'comments' => $commentRepository->findByEpisode($episode, ['id' => 'asc']),
+            'form' => $form,
+        ]);
+    }
 }
+

@@ -7,6 +7,30 @@
 			<p>Episodes : {{episode.title}}, {{episode.number}}</p>
 			<p>Synopsis : {{episode.synopsis}}</p>
 		</div>
-			<a href="{{ path("program_season_show", { slug: program.slug, seasonId: season.id}) }}">Retour sur la saison {{season.number}}</a>
+
+		<div class="comment-episode">
+			<h3>Les commentaires<h3>
+			<div class="container-comment">
+				{% for comment in comments %}
+					<p>Note: {{comment.rate}} / 5 <br>
+						Commentaire: {{comment.comment}}
+					</p>
+				{% endfor %}
+			</div>
+
+				{# {% if is_granted("ROLE_CONTRIBUTOR") %}
+					<a href="{{ path('comment_edit', { 'id': comment.id} ) }}">Éditer</a>
+					<a href="{{ path('comment_delete', { 'id': comment.id} ) }}">Supprimer</a>
+					{% elseif  is_granted("ROLE_ADMIN") %}
+						<a href="{{ path('comment_delete', {'id': comment.id} ) }}">Supprimer</a>
+					{% else %}
+						<p>pas de commentaires pour cet épisode</p>
+				{% endif %} #}
+			{% if app.user %}
+				<h3>Ecrire un commentaire</h3>
+				{% include "comment/_form.html.twig" %}
+			{% endif %}
+			<a href="{{ path("program_season_show", { slug: program.slug, seasonId: season.id}) }}">Retour à la liste</a>
+		</div>
 	</div>
 {% endblock %}
