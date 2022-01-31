@@ -30,7 +30,7 @@
 				<h3>Ecrire un commentaire</h3>
 				{% include "comment/_form.html.twig" %}
 			{% endif %}
-			<a href="{{ path("program_season_show", { slug: program.slug, seasonId: season.id}) }}">Retour à la liste</a>
 		</div>
+			<a href="{{ path("program_season_show", { slug: program.slug, seasonId: season.id}) }}">Retour à la liste</a>
 	</div>
 {% endblock %}
