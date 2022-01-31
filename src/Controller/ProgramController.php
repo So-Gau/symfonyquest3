@@ -93,18 +93,37 @@ class ProgramController extends AbstractController
         ]);
         
     }
+
     
     /**
-    *
-    * @Route("/{slug}", name="show")
-    * @ParamConverter("program", class="App\Entity\Program", options={"mapping": {"slug" : "slug"}})
-    * @return Response
-    */
+     *
+     * @Route("/{slug}", name="show")
+     * @ParamConverter("program", class="App\Entity\Program", options={"mapping": {"slug" : "slug"}})
+     * @return Response
+     */
     public function show(Program $program, SeasonRepository $seasonRepository): Response
     {
-       
+        
         return $this->render('program/show.html.twig', [
             'program' => $program,
+        ]);
+    }
+    
+    #[Route('/{slug}/edit', name: 'program_edit')]
+    public function edit(Request $request, Program $program, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(ProgramType::class, $program);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            return $this->redirectToRoute('program_index');
+        }
+
+        return $this->renderForm('program/edit.html.twig', [
+            'program' => $program,
+            'form' => $form,
         ]);
     }
 
@@ -137,11 +156,6 @@ class ProgramController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if ($this->getUser() == null ) {
-                return $this->redirectToRoute('login');
-
-                throw new AccessDeniedException('Vous devriez être connecté pour laisser un commentaire. :)');
-            }
             $comment->setEpisode($episode);
             $comment->setAuthor($this->getUser());
             $entityManager->persist($comment);
