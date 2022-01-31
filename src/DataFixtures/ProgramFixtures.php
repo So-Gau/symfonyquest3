@@ -69,6 +69,7 @@ class ProgramFixtures extends Fixture implements DependentFixtureInterface
             $program->setPoster($programData['poster']);
             $program->setSummary($programData['summary']);
             $program->setYear($programData['year']);
+            $program->setOwner($programData['owner']);
             $program->setSlug(
                 $this->slugify->generate($programData['title'])
             );
@@ -87,6 +88,7 @@ class ProgramFixtures extends Fixture implements DependentFixtureInterface
         return [
           ActorFixtures::class,
           CategoryFixtures::class,
+          UserFixtures::class,
         ];
     }
 }
