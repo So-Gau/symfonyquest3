@@ -27,13 +27,13 @@ use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException; //q21
 
 
 /**
  * @Route("/program", name="program_")
  */
 class ProgramController extends AbstractController
-
 {
       /**
      * Show all rows from Program’s entity
@@ -74,6 +74,7 @@ class ProgramController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $program->setOwner($this->getUser());
             $slug = $slugify->generate($program->getTitle());
             $program->setSlug($slug);
             
@@ -93,7 +94,6 @@ class ProgramController extends AbstractController
         ]);
         
     }
-
     
     /**
      *
@@ -108,15 +108,21 @@ class ProgramController extends AbstractController
             'program' => $program,
         ]);
     }
-    
-    #[Route('/{slug}/edit', name: 'program_edit')]
+
+    #[Route('/{slug}/edit', name: 'edit')]
     public function edit(Request $request, Program $program, EntityManagerInterface $entityManager): Response
     {
+        $program = new Program();
         $form = $this->createForm(ProgramType::class, $program);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
+             // Vérifier si l'utilisateur connecté est le propriétaire du programme.
+             if (!($this->getUser() == $program->getOwner())) {
+                   // Si ce n'est pas le propriétaire, l'exception 403 Access Denied est levée.
+                   throw new AccessDeniedException('seul le proprietaire peut editer le programme!');
+             }
+        $entityManager->flush();
 
             return $this->redirectToRoute('program_index');
         }
