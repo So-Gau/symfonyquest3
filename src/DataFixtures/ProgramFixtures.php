@@ -17,7 +17,7 @@ class ProgramFixtures extends Fixture implements DependentFixtureInterface
             'poster'=> 'https://images-na.ssl-images-amazon.com/images/I/81zqK4i3H0S.jpg',
             'summary' => 'Rick Grimes se réveille à l’hôpital alors que l’épidémie Zombie est déjà bien entamée.',
             'year' => '2010',
-            'category'=>'category_4', //ou juste '4' les deux marches
+            'category'=>'category_4', 
             'actors'=>[''],
         ],
         [
