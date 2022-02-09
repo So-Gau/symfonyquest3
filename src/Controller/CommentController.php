@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 #[Route('/comment', name:'comment')]
@@ -77,9 +78,8 @@ class CommentController extends AbstractController
     }
 
      /**
-     * @IsGranted("ROLE_CONTRIBUTOR")
-     * @IsGranted("ROLE_ADMIN")
-     * */
+     * @Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_CONTRIBUTOR')")
+     */
     #[Route('/{id}', name: '_delete', methods: ['POST'])]
     public function delete(Request $request, Comment $comment, EntityManagerInterface $entityManager): Response
     {
@@ -88,6 +88,10 @@ class CommentController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('comment_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('program_episode_show', [
+            'slug' => $comment->getEpisode()->getSeason()->getProgram()->getSlug(),
+            'seasonId'=> $comment->getEpisode()->getSeason()->getId(),
+            'episodeId'=>$comment->getEpisode()->getId()
+        ], Response::HTTP_SEE_OTHER);
     }
 }
