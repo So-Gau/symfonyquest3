@@ -112,19 +112,20 @@ class ProgramController extends AbstractController
     #[Route('/{slug}/edit', name: 'edit')]
     public function edit(Request $request, Program $program, EntityManagerInterface $entityManager): Response
     {
-        $program = new Program();
         $form = $this->createForm(ProgramType::class, $program);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-             // Vérifier si l'utilisateur connecté est le propriétaire du programme.
-             if (!($this->getUser() == $program->getOwner())) {
-                   // Si ce n'est pas le propriétaire, l'exception 403 Access Denied est levée.
-                   throw new AccessDeniedException('seul le proprietaire peut editer le programme!');
-             }
-        $entityManager->flush();
-
-            return $this->redirectToRoute('program_index');
+            // Vérifier si l'utilisateur connecté est le propriétaire du programme.
+            if ($this->getUser() == $program->getOwner() || in_array("ROLE_ADMIN", $this->getUser()->getRoles()) ) {
+                $entityManager->flush();
+    
+                $this->addFlash('succes', 'le programme a bien été editer');
+    
+                return $this->redirectToRoute('program_index');
+            }
+            // Si ce n'est pas le propriétaire, l'exception 403 Access Denied est levée.
+            throw new AccessDeniedException('seul le proprietaire ou l admin peuvent editer le programme!');
         }
 
         return $this->renderForm('program/edit.html.twig', [

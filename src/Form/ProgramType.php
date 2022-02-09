@@ -17,11 +17,12 @@ class ProgramType extends AbstractType
         $builder
             ->add('title', TextType::class)
             ->add('poster', TextType::class)
+            ->add('summary', TextType::class)
             ->add('category', null, ['choice_label' => 'name'])
             ->add('year', TextType::class)
             ->add('actors', EntityType::class, [
                 'class' => Actor::class,
-                'choice_label' => 'selector',
+                'choice_label' => 'name',
                 'multiple' => true,
                 'expanded' => true,
                 'by_reference' => false
