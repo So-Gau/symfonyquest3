@@ -7,6 +7,7 @@ use App\Form\SeasonType;
 use App\Repository\SeasonRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -80,7 +81,7 @@ class SeasonController extends AbstractController
             $entityManager->flush();
         }
 
-        $this->addFlash('alerte', 'êtes-vous sûre de vouloir supprimer la saison ?');
+        $this->addFlash('alerte', 'la saison a été supprimé');
 
         return $this->redirectToRoute('season_index', [], Response::HTTP_SEE_OTHER);
     }

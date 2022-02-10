@@ -25,6 +25,9 @@
 						<p>Description :
 							{{season.description}}
 						</p>
+					{% if is_granted("ROLE_ADMIN") %}
+                    	<a href="{{ path('season_edit', { "id": season.id }) }}">Éditer</a>
+                	{% endif %}
 				{% endfor %}
 				<strong>Acteurs :</strong>
 				<ul>
@@ -38,6 +41,9 @@
 				</ul>
 			</div>
 		</div>
+	{% if is_granted("ROLE_ADMIN") %}
+        <a href="{{ path('season_new') }}">Ajouter une saison</a>
+    {% endif %}
 	</div>
    <a class="link-style" href="{{ path('program_index') }}">
         Retour à la liste des programmes

@@ -84,7 +84,7 @@ class EpisodeController extends AbstractController
             $entityManager->flush();
         }
 
-        $this->addFlash('alerte', 'êtes-vous sûr de vouloir supprimer cet épisode ?');
+        $this->addFlash('alerte', 'l episode a bien été supprimer');
 
         return $this->redirectToRoute('episode_index', [], Response::HTTP_SEE_OTHER);
     }
