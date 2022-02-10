@@ -37,6 +37,8 @@ class EpisodeController extends AbstractController
             $entityManager->persist($episode);
             $entityManager->flush();
 
+            $this->addFlash('success', 'Un nouvel épisode a bien été crée');
+
             return $this->redirectToRoute('episode_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -63,6 +65,8 @@ class EpisodeController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
+            $this->addFlash('success', ' l episode a bien été édité');
+
             return $this->redirectToRoute('episode_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -79,6 +83,8 @@ class EpisodeController extends AbstractController
             $entityManager->remove($episode);
             $entityManager->flush();
         }
+
+        $this->addFlash('alerte', 'êtes-vous sûr de vouloir supprimer cet épisode ?');
 
         return $this->redirectToRoute('episode_index', [], Response::HTTP_SEE_OTHER);
     }

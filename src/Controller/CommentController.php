@@ -39,6 +39,8 @@ class CommentController extends AbstractController
             $entityManager->persist($comment);
             $entityManager->flush();
 
+            $this->addFlash('success', 'Un nouveau commentaire a bien été ajouté');
+
             return $this->redirectToRoute('comment_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -68,6 +70,8 @@ class CommentController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
+            $this->addFlash('success', 'Un nouveau commentaire a bien été edité');
+
             return $this->redirectToRoute('comment_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -87,6 +91,8 @@ class CommentController extends AbstractController
             $entityManager->remove($comment);
             $entityManager->flush();
         }
+
+        $this->addFlash('alerte', 'êtes-vous sûre de vouloir supprimer ce commentaire ?');
 
         return $this->redirectToRoute('program_episode_show', [
             'slug' => $comment->getEpisode()->getSeason()->getProgram()->getSlug(),
